@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
@@ -31,6 +32,16 @@ class MainActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         toolbar.setupWithNavController(navController,appBarConfiguration)
         setSupportActionBar(toolbar)
+
+        navController.addOnDestinationChangedListener {_,desitnation,_->
+            if(desitnation.id == R.id.loginFragment || desitnation.id == R.id.registerUserFragment) {
+                toolbar.visibility = View.GONE
+            }
+            else {
+                toolbar.visibility = View.VISIBLE
+            }
+
+        }
 
     }
 

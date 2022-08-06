@@ -1,12 +1,15 @@
 package com.example.letschat.data.repository
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.letschat.data.dao.UserDao
 import com.example.letschat.data.model.User
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class UserRepository {
@@ -21,12 +24,18 @@ class UserRepository {
     init {
         userAuthState.value = mAuth.currentUser != null
     }
-    suspend fun registerUser(firstName:String,lastName:String,email:String,password:String) {
+    suspend fun uploadProfileImg(profileImgUri: Uri,imgFileType:String): String? {
+        return userdoa.saveUserProfileImgFile(profileImgUri,imgFileType)
+    }
+    suspend fun registerUser(firstName:String, lastName:String,imgUri:Uri ,imgtype:String, email:String, password:String) {
         try {
             val result:AuthResult = mAuth.createUserWithEmailAndPassword(email,password)
                 .await()
             if(result.user != null) {
-                val user = User(uid = mAuth.uid,firstName = firstName,lastName = lastName,email = email)
+                val imgUrl = withContext(Dispatchers.IO) {
+                    uploadProfileImg(imgUri, imgtype)
+                }
+                val user = User(uid = mAuth.uid,firstName = firstName,lastName = lastName,email = email, profileImg = imgUrl)
                 val fireStoreResult :Boolean = userdoa.saveUserDetails(user)
                 userAuthState.postValue(true)
             }

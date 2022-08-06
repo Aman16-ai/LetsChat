@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.Authentication.LoginFragment"
     android:padding="10dp"
-    android:background="#a8dadc"
     >
 
     <!-- TODO: Update blank fragment layout -->
@@ -26,8 +25,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="Login to"
-        android:textColor="#f1faee"
+        android:text="Welcome back!"
+        android:textColor="@color/black"
         android:textSize="35dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/cabinbold"
@@ -36,14 +35,14 @@
         android:id="@+id/heading_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="GaanaWorld"
+        android:text="Lets Chat"
         android:fontFamily="@font/cabinbold"
         app:layout_constraintTop_toBottomOf="@+id/heading_tv1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="2dp"
         android:gravity="left"
-        android:textColor="#e63946"
+        android:textColor="#3f2b96"
         android:textSize="42dp"
         android:textStyle="bold"
         />
@@ -63,7 +62,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:padding="10dp"
-           android:background="#1d3557"
+           android:background="@color/white"
            >
            <com.google.android.material.textfield.TextInputLayout
                android:id="@+id/email_et_layout"
@@ -74,17 +73,12 @@
                app:layout_constraintRight_toRightOf="parent"
                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                android:layout_marginTop="50dp"
-               app:boxBackgroundColor="#457b9d"
-               app:hintTextColor="#e63946"
-               app:boxStrokeColor="#e63946"
                >
                <com.google.android.material.textfield.TextInputEditText
                    android:id="@+id/email_et"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:hint="Email"
-                   android:textColorHint="#f1faee"
-                   android:textColor="@color/white"
                    android:fontFamily="@font/cabinbold"
                    />
            </com.google.android.material.textfield.TextInputLayout>
@@ -98,16 +92,13 @@
                app:layout_constraintRight_toRightOf="parent"
                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                android:layout_marginTop="20dp"
-               app:boxBackgroundColor="#457b9d"
-               app:hintTextColor="#e63946"
-               app:boxStrokeColor="#e63946"
+
                >
                <com.google.android.material.textfield.TextInputEditText
                    android:id="@+id/pass_et"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:hint="Password"
-                   android:textColor="@color/white"
                    android:fontFamily="@font/cabinbold"
                    android:inputType="textPassword"
                    />
@@ -122,7 +113,7 @@
                android:layout_marginTop="40dp"
                app:layout_constraintBottom_toBottomOf="parent"
                android:layout_marginBottom="10dp"
-               android:backgroundTint="#e63946"
+               android:backgroundTint="#3f2b96"
                app:cornerRadius="10dp"
                android:textSize="15dp"
                android:padding="10dp"
@@ -143,6 +134,6 @@
         android:textStyle="bold"
         android:textSize="18dp"
         android:fontFamily="@font/cabinbold"
-        android:textColor="#f1faee"
+        android:textColor="@color/black"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
