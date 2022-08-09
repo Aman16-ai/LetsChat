@@ -1,9 +1,12 @@
 package com.example.letschat.data.repository
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.letschat.data.dao.MessageDao
 import com.example.letschat.data.dao.UserDao
+import com.example.letschat.data.model.Message
 import com.example.letschat.data.model.User
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -16,6 +19,7 @@ class UserRepository {
     private var mAuth : FirebaseAuth = FirebaseAuth.getInstance()
     private var userAuthState : MutableLiveData<Boolean> = MutableLiveData()
     private var userdoa : UserDao = UserDao()
+    private var messageDao : MessageDao = MessageDao()
 
     private var _allUsers:MutableLiveData<List<User>> = MutableLiveData()
     val allUser : LiveData<List<User>>
@@ -32,9 +36,7 @@ class UserRepository {
             val result:AuthResult = mAuth.createUserWithEmailAndPassword(email,password)
                 .await()
             if(result.user != null) {
-                val imgUrl = withContext(Dispatchers.IO) {
-                    uploadProfileImg(imgUri, imgtype)
-                }
+                val imgUrl = uploadProfileImg(imgUri, imgtype)
                 val user = User(uid = mAuth.uid,firstName = firstName,lastName = lastName,email = email, profileImg = imgUrl)
                 val fireStoreResult :Boolean = userdoa.saveUserDetails(user)
                 userAuthState.postValue(true)
@@ -65,6 +67,23 @@ class UserRepository {
     suspend fun getAllUsers() {
         val users = userdoa.getAllUser()
         val templist = users.filter { user -> user.uid != mAuth.uid } as ArrayList<User>
+
+        for(user in templist) {
+            val message = user.uid?.let { fetchLastMessageOfFriend(it) }
+            user.lastMessage = message?.messagetxt
+            user.lastMessageSenderId = message?.userId
+        }
         _allUsers.postValue(templist)
+    }
+
+    private suspend fun fetchLastMessageOfFriend(friendId:String) : Message? {
+        val roomID = mAuth.uid + friendId
+        val messages = messageDao.getAllMessageFromRoom(roomID)
+        return if(messages.size > 0) {
+            messages[messages.size-1]
+        } else {
+            null
+        }
+
     }
 }

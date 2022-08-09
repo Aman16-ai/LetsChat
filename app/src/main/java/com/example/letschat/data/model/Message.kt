@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp
 import java.util.*
 
 data class Message(
-    val messagetxt:String="",
-    val userId:String="",
-    val timestamp: Timestamp = Timestamp.now()
+    val messagetxt:String? = null,
+    val userId:String? = null,
+    val timestamp: Timestamp?= Timestamp.now()
 )

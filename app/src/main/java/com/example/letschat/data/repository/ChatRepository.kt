@@ -15,7 +15,7 @@ class ChatRepository {
 
     fun getAllMessage(friendUserID: String) {
         val roomID = mAuth.uid + friendUserID
-        messageDao.getAllMessagesFromRoom(roomID)
+        messageDao.getAllMessagesFromRoomInRealTime(roomID)
     }
 
     suspend fun sendMessage(message:String,friendUserID: String) {

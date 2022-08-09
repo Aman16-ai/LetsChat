@@ -15,19 +15,37 @@ class MessageDao {
     val allMessage:LiveData<List<Message>> = _allMessage
 
     suspend fun saveMessage(message:Message,roomID:String): Boolean {
-        val result = db.collection("chats").document(roomID).collection("messages").add(message).await()
+        val result = db
+            .collection("chats")
+            .document(roomID).collection("messages")
+            .add(message)
+            .await()
         return result!=null
     }
 
-    fun getAllMessagesFromRoom(roomID: String) {
-        db.collection("chats").document(roomID).collection("messages").addSnapshotListener{snapshot,e->
-            if(e != null) {
-                Log.w("message", "listen faild")
-            }
-            else {
-                val message = snapshot?.toObjects(Message::class.java)
-                _allMessage.postValue(message)
-            }
+    suspend fun getAllMessageFromRoom(roomID: String): MutableList<Message> {
+        val messages = db.collection("chats")
+            .document(roomID)
+            .collection("messages")
+            .get()
+            .await()
+            .toObjects(Message::class.java)
+             messages.sortBy { it.timestamp?.seconds }
+        return messages
+    }
+
+    fun getAllMessagesFromRoomInRealTime(roomID: String) {
+        db.collection("chats")
+            .document(roomID)
+            .collection("messages")
+            .addSnapshotListener{snapshot,e->
+                if(e != null) {
+                    Log.w("message", "listen faild")
+                }
+                else {
+                    val message = snapshot?.toObjects(Message::class.java)
+                    _allMessage.postValue(message)
+                }
         }
     }
 }

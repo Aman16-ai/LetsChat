@@ -21,8 +21,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:titleTextColor="@color/black"
-
+            app:titleTextColor="@color/white"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             />
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.fragment.app.FragmentContainerView
