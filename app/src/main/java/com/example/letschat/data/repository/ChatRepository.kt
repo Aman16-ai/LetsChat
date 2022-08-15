@@ -11,11 +11,15 @@ class ChatRepository {
 
     private val messageDao = MessageDao()
     private val mAuth = FirebaseAuth.getInstance()
-    var messages : LiveData<List<Message>> = messageDao.allMessage
+    private var _messages : MutableLiveData<List<Message>> = MutableLiveData()
+    val messages: LiveData<List<Message>>
+    get() = _messages
 
     fun getAllMessage(friendUserID: String) {
         val roomID = mAuth.uid + friendUserID
-        messageDao.getAllMessagesFromRoomInRealTime(roomID)
+        messageDao.getAllMessagesFromRoomInRealTime(roomID) {
+            _messages.postValue(it)
+        }
     }
 
     suspend fun sendMessage(message:String,friendUserID: String) {

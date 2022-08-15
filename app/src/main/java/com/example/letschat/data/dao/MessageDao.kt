@@ -11,8 +11,6 @@ import kotlinx.coroutines.tasks.await
 class MessageDao {
     private val db = FirebaseFirestore.getInstance()
     private val mAuth = FirebaseAuth.getInstance()
-    private var _allMessage : MutableLiveData<List<Message>> = MutableLiveData()
-    val allMessage:LiveData<List<Message>> = _allMessage
 
     suspend fun saveMessage(message:Message,roomID:String): Boolean {
         val result = db
@@ -23,18 +21,18 @@ class MessageDao {
         return result!=null
     }
 
-    suspend fun getAllMessageFromRoom(roomID: String): MutableList<Message> {
+    suspend fun getAllMessage(roomID:String): MutableList<Message> {
         val messages = db.collection("chats")
             .document(roomID)
             .collection("messages")
             .get()
             .await()
             .toObjects(Message::class.java)
-             messages.sortBy { it.timestamp?.seconds }
+        messages.sortBy { it.timestamp?.seconds }
         return messages
     }
 
-    fun getAllMessagesFromRoomInRealTime(roomID: String) {
+    fun getAllMessagesFromRoomInRealTime(roomID: String,callBack:(List<Message>)->Unit) {
         db.collection("chats")
             .document(roomID)
             .collection("messages")
@@ -44,7 +42,7 @@ class MessageDao {
                 }
                 else {
                     val message = snapshot?.toObjects(Message::class.java)
-                    _allMessage.postValue(message)
+                    callBack(message as List<Message>)
                 }
         }
     }

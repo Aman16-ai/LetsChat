@@ -47,4 +47,9 @@
             android:name="user"
             app:argType="com.example.letschat.data.model.User" />
     </fragment>
+    <fragment
+        android:id="@+id/search_item"
+        android:name="com.example.letschat.ui.accounts.SearchFriends"
+        android:label="fragment_search_friends"
+        tools:layout="@layout/fragment_search_friends" />
 </navigation>

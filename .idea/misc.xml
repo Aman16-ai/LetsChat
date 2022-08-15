@@ -5,10 +5,12 @@
       <map>
         <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/drawable/gradient_drawable.xml" value="0.168" />
         <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/activity_main.xml" value="0.19583333333333333" />
+        <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/all_user_list.xml" value="0.19583333333333333" />
         <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/fragment_chat.xml" value="0.19583333333333333" />
         <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/fragment_friends.xml" value="0.19583333333333333" />
         <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/fragment_login.xml" value="0.19583333333333333" />
         <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/fragment_register_user.xml" value="0.19583333333333333" />
+        <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/fragment_search_friends.xml" value="0.19583333333333333" />
         <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/friends_list.xml" value="0.2" />
         <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/receive_message_box.xml" value="0.19375" />
         <entry key="..\:/AndroidProjects/LetsChat/app/src/main/res/layout/send_message_box.xml" value="0.19583333333333333" />

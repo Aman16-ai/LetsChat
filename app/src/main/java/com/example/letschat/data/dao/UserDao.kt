@@ -11,7 +11,7 @@ import kotlinx.coroutines.tasks.await
 class UserDao {
     private var db = FirebaseFirestore.getInstance()
     private var mAuth = FirebaseAuth.getInstance()
-    suspend fun getUserDetails(): User? {
+    suspend fun getCurrentUser(): User? {
         return mAuth.uid?.let {
             db.collection("user").document(it).get().await().toObject(User::class.java)
         }

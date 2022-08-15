@@ -4,8 +4,10 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.letschat.data.dao.FriendRequestDao
 import com.example.letschat.data.dao.MessageDao
 import com.example.letschat.data.dao.UserDao
+import com.example.letschat.data.model.FriendRequest
 import com.example.letschat.data.model.Message
 import com.example.letschat.data.model.User
 import com.google.firebase.auth.AuthResult
@@ -20,10 +22,19 @@ class UserRepository {
     private var userAuthState : MutableLiveData<Boolean> = MutableLiveData()
     private var userdoa : UserDao = UserDao()
     private var messageDao : MessageDao = MessageDao()
+    private val friendRequestDao = FriendRequestDao()
+
+    private var _allUserProfile : MutableLiveData<List<User>> = MutableLiveData()
+    val allUserProfile : LiveData<List<User>>
+    get() = _allUserProfile
 
     private var _allUsers:MutableLiveData<List<User>> = MutableLiveData()
     val allUser : LiveData<List<User>>
     get() = _allUsers
+
+    private var _allFriendRequests : MutableLiveData<List<FriendRequest>> = MutableLiveData()
+    val allFriendRequest :LiveData<List<FriendRequest>>
+    get() = _allFriendRequests
 
     init {
         userAuthState.value = mAuth.currentUser != null
@@ -67,7 +78,6 @@ class UserRepository {
     suspend fun getAllUsers() {
         val users = userdoa.getAllUser()
         val templist = users.filter { user -> user.uid != mAuth.uid } as ArrayList<User>
-
         for(user in templist) {
             val message = user.uid?.let { fetchLastMessageOfFriend(it) }
             user.lastMessage = message?.messagetxt
@@ -78,12 +88,31 @@ class UserRepository {
 
     private suspend fun fetchLastMessageOfFriend(friendId:String) : Message? {
         val roomID = mAuth.uid + friendId
-        val messages = messageDao.getAllMessageFromRoom(roomID)
-        return if(messages.size > 0) {
+        val messages:MutableList<Message> = messageDao.getAllMessage(roomID)
+        return if(messages.isNotEmpty()) {
             messages[messages.size-1]
         } else {
             null
         }
+    }
 
+    suspend fun getAllUserProfile() {
+        _allUserProfile.postValue(userdoa.getAllUser())
+    }
+
+
+    suspend fun sendFriendRequest(receiverUser:User) {
+        val sendUser = userdoa.getCurrentUser()
+        val myFriendRequest = FriendRequest(
+            senderUser = sendUser,
+            receiverUser = receiverUser,
+            status = false
+        )
+
+        friendRequestDao.sendFriendRequest(myFriendRequest)
+    }
+
+    suspend fun getAllMyFriendRequests() {
+        _allFriendRequests.postValue(friendRequestDao.getAllFriendRequest())
     }
 }

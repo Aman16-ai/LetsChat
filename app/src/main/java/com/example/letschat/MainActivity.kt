@@ -61,6 +61,9 @@ class MainActivity : AppCompatActivity() {
             logoutViewModel.logout()
             navController.navigate(R.id.loginFragment)
         }
+        else if(item.itemId == R.id.search_item) {
+            navController.navigate(R.id.search_item)
+        }
         return true
     }
 }
