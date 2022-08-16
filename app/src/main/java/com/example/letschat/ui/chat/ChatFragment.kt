@@ -46,7 +46,7 @@ class ChatFragment : Fragment() {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_chat, container, false)
 
-        val friendUserId = navArgs.user.uid
+        val friendUserId = navArgs.frd.user?.uid
         chatAdapter = ChatAdapter(requireContext())
 
         chatViewModel.getAllMessages(friendUserId!!).observe(viewLifecycleOwner) {

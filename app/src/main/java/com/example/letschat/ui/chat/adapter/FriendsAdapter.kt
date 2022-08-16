@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.letschat.R
+import com.example.letschat.data.model.Friend
 import com.example.letschat.data.model.Message
 import com.example.letschat.data.model.User
 import com.example.letschat.ui.chat.FriendsFragmentDirections
@@ -24,7 +25,7 @@ import org.w3c.dom.Text
 
 class FriendsAdapter(val context: Context) : RecyclerView.Adapter<FriendsAdapter.FriendViewHolder>() {
 
-    private var friendsList = ArrayList<User>()
+    private var friendsList = ArrayList<Friend>()
     private val mAuth:FirebaseAuth = FirebaseAuth.getInstance()
     inner class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txt : TextView = itemView.findViewById(R.id.friend_txt)
@@ -39,8 +40,8 @@ class FriendsAdapter(val context: Context) : RecyclerView.Adapter<FriendsAdapter
     }
 
     override fun onBindViewHolder(holder: FriendViewHolder, position: Int) {
-        holder.txt.text = "${friendsList[position].firstName} ${friendsList[position].lastName}"
-        Glide.with(context).load(friendsList[position].profileImg?:R.drawable.ic_baseline_person_24).into(holder.img)
+        holder.txt.text = "${friendsList[position].user?.firstName} ${friendsList[position].user?.lastName}"
+        Glide.with(context).load(friendsList[position].user?.profileImg?:R.drawable.ic_baseline_person_24).into(holder.img)
 
         mAuth.uid?.let { currentUserID ->
             if(currentUserID == friendsList[position].lastMessageSenderId) {
@@ -56,7 +57,7 @@ class FriendsAdapter(val context: Context) : RecyclerView.Adapter<FriendsAdapter
         }
     }
 
-    fun updateFriends(updatedList:List<User>) {
+    fun updateFriends(updatedList:List<Friend>) {
         friendsList.clear()
         friendsList.addAll(updatedList)
         notifyDataSetChanged()

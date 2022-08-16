@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.letschat.data.dao.FriendRequestDao
 import com.example.letschat.data.dao.MessageDao
 import com.example.letschat.data.dao.UserDao
+import com.example.letschat.data.model.Friend
 import com.example.letschat.data.model.FriendRequest
 import com.example.letschat.data.model.Message
 import com.example.letschat.data.model.User
@@ -22,19 +23,15 @@ class UserRepository {
     private var userAuthState : MutableLiveData<Boolean> = MutableLiveData()
     private var userdoa : UserDao = UserDao()
     private var messageDao : MessageDao = MessageDao()
-    private val friendRequestDao = FriendRequestDao()
 
     private var _allUserProfile : MutableLiveData<List<User>> = MutableLiveData()
     val allUserProfile : LiveData<List<User>>
     get() = _allUserProfile
 
-    private var _allUsers:MutableLiveData<List<User>> = MutableLiveData()
-    val allUser : LiveData<List<User>>
+    private var _allUsers:MutableLiveData<List<Friend>> = MutableLiveData()
+    val allUser : LiveData<List<Friend>>
     get() = _allUsers
 
-    private var _allFriendRequests : MutableLiveData<List<FriendRequest>> = MutableLiveData()
-    val allFriendRequest :LiveData<List<FriendRequest>>
-    get() = _allFriendRequests
 
     init {
         userAuthState.value = mAuth.currentUser != null
@@ -78,12 +75,15 @@ class UserRepository {
     suspend fun getAllUsers() {
         val users = userdoa.getAllUser()
         val templist = users.filter { user -> user.uid != mAuth.uid } as ArrayList<User>
+        val friendList:MutableList<Friend> = ArrayList()
         for(user in templist) {
             val message = user.uid?.let { fetchLastMessageOfFriend(it) }
-            user.lastMessage = message?.messagetxt
-            user.lastMessageSenderId = message?.userId
+            val friend = Friend(user = user,lastMessage = message?.messagetxt, lastMessageSenderId = message?.userId)
+            friendList.add(friend)
         }
-        _allUsers.postValue(templist)
+
+        _allUsers.postValue(friendList)
+
     }
 
     private suspend fun fetchLastMessageOfFriend(friendId:String) : Message? {
@@ -101,18 +101,5 @@ class UserRepository {
     }
 
 
-    suspend fun sendFriendRequest(receiverUser:User) {
-        val sendUser = userdoa.getCurrentUser()
-        val myFriendRequest = FriendRequest(
-            senderUser = sendUser,
-            receiverUser = receiverUser,
-            status = false
-        )
 
-        friendRequestDao.sendFriendRequest(myFriendRequest)
-    }
-
-    suspend fun getAllMyFriendRequests() {
-        _allFriendRequests.postValue(friendRequestDao.getAllFriendRequest())
-    }
 }

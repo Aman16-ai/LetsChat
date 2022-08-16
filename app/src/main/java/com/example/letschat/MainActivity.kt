@@ -64,6 +64,9 @@ class MainActivity : AppCompatActivity() {
         else if(item.itemId == R.id.search_item) {
             navController.navigate(R.id.search_item)
         }
+        else if(item.itemId == R.id.profile_item) {
+            navController.navigate(R.id.profile)
+        }
         return true
     }
 }

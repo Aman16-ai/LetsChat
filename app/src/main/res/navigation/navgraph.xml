@@ -32,8 +32,8 @@
     <fragment
         android:id="@+id/friendsFragment"
         android:name="com.example.letschat.ui.chat.FriendsFragment"
-        android:label="fragment_friends"
-        tools:layout="@layout/fragment_friends" >
+        android:label="letsChat"
+        tools:layout="@layout/fragment_friends">
         <action
             android:id="@+id/action_friendsFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
@@ -41,15 +41,20 @@
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.example.letschat.ui.chat.ChatFragment"
-        android:label="fragment_chat"
+        android:label="Chat"
         tools:layout="@layout/fragment_chat" >
         <argument
-            android:name="user"
-            app:argType="com.example.letschat.data.model.User" />
+            android:name="frd"
+            app:argType="com.example.letschat.data.model.Friend" />
     </fragment>
     <fragment
         android:id="@+id/search_item"
         android:name="com.example.letschat.ui.accounts.SearchFriends"
-        android:label="fragment_search_friends"
+        android:label="Search"
         tools:layout="@layout/fragment_search_friends" />
+    <fragment
+        android:id="@+id/profile"
+        android:name="com.example.letschat.ui.accounts.Profile"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>
