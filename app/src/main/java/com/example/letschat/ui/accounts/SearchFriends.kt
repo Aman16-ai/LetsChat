@@ -1,10 +1,9 @@
 package com.example.letschat.ui.accounts
 
 import android.os.Bundle
+import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +16,7 @@ class SearchFriends : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var userProfileAdapter: AllUserProfileAdapter
+    private lateinit var searchView:SearchView
 
     private val friendRequestViewModel : FriendRequestViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +46,12 @@ class SearchFriends : Fragment() {
 
 
         return view
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_friend_fragment_menu,menu)
+        val searchItem = menu.findItem(R.id.search_friend_item)
+        searchView = searchItem.actionView as SearchView
     }
 
 

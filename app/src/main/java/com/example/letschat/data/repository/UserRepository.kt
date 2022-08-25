@@ -73,8 +73,8 @@ class UserRepository {
     }
 
     suspend fun getAllUsers() {
-        val users = userdoa.getAllUser()
-        val templist = users.filter { user -> user.uid != mAuth.uid } as ArrayList<User>
+        val users = userdoa.getAllFriends()
+        val templist = users?.filter { user -> user.uid != mAuth.uid } as ArrayList<User>
         val friendList:MutableList<Friend> = ArrayList()
         for(user in templist) {
             val message = user.uid?.let { fetchLastMessageOfFriend(it) }

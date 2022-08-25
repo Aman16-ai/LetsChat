@@ -7,18 +7,28 @@ import com.example.letschat.data.dao.FriendRequestDao
 import com.example.letschat.data.dao.UserDao
 import com.example.letschat.data.model.FriendRequest
 import com.example.letschat.data.repository.FriendRequestRepository
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 
 class ProfileViewModel:ViewModel() {
 
     private val userDao = UserDao()
     private val friendRequestDao = FriendRequestDao()
-    private val friendRequestRepository = FriendRequestRepository(userDao,friendRequestDao)
+    private val mAuth = FirebaseAuth.getInstance()
+
+    private val friendRequestRepository = FriendRequestRepository(userDao,friendRequestDao,mAuth)
 
      val allFriendRequests : LiveData<List<FriendRequest>> = friendRequestRepository.allFriendRequest
     init {
         viewModelScope.launch {
             friendRequestRepository.getAllMyFriendRequests()
+        }
+    }
+
+    fun acceptFriendRequest(friendRequest: FriendRequest) {
+        viewModelScope.launch {
+            friendRequestRepository.acceptFriendRequest(friendRequest)
         }
     }
 }

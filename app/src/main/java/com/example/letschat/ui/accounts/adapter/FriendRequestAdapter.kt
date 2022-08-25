@@ -13,9 +13,11 @@ import com.example.letschat.R
 import com.example.letschat.data.model.Friend
 import com.example.letschat.data.model.FriendRequest
 import com.example.letschat.data.model.User
+import com.example.letschat.ui.accounts.viewmodel.FriendRequestViewModel
+import com.example.letschat.ui.accounts.viewmodel.ProfileViewModel
 import com.example.letschat.utils.toast
 
-class FriendRequestAdapter(val context:Context):RecyclerView.Adapter<FriendRequestAdapter.FriendRequestAdapter>() {
+class FriendRequestAdapter(val context:Context,val profileViewModel: ProfileViewModel):RecyclerView.Adapter<FriendRequestAdapter.FriendRequestAdapter>() {
 
     private val allFriendRequestUser:MutableList<FriendRequest> = ArrayList()
     inner class FriendRequestAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,10 +37,10 @@ class FriendRequestAdapter(val context:Context):RecyclerView.Adapter<FriendReque
         Glide.with(context).load(senderUser?.profileImg?: R.drawable.ic_baseline_person_24).into(holder.userProfileImageView)
         holder.userNameTextView.text = "${senderUser?.firstName} ${senderUser?.lastName}"
 
-//        holder.btn.setOnClickListener {
-//            context.toast("sending friend request")
-//            friendRequestViewModel.sendFriendRequest(user)
-//        }
+        holder.btn.setOnClickListener {
+            profileViewModel.acceptFriendRequest(allFriendRequestUser[position])
+
+        }
     }
 
     fun updateUserList(newUserList:List<FriendRequest>) {

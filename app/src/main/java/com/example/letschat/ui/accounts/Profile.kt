@@ -29,7 +29,7 @@ class Profile : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         recyclerView = view.findViewById(R.id.friend_request_recyclerview)
-        friendRequestAdapter = FriendRequestAdapter(requireContext())
+        friendRequestAdapter = FriendRequestAdapter(requireContext(),profileViewModel)
 
         profileViewModel.allFriendRequests.observe(viewLifecycleOwner) {
             it?.let {

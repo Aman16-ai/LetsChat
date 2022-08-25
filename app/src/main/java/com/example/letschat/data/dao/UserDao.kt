@@ -20,6 +20,23 @@ class UserDao {
     suspend fun getAllUser() : List<User> {
         return db.collection("user").get().await().toObjects(User::class.java)
     }
+
+    suspend fun getAllFriends():List<User>? {
+        return try {
+            db.collection("user")
+                .document(mAuth.uid!!)
+                .collection("friends")
+                .get()
+                .await()
+                .toObjects(User::class.java)
+        }
+        catch(e:Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+
     suspend fun saveUserProfileImgFile(profileUri:Uri,type:String):String? {
         val storage = FirebaseStorage.getInstance().reference.child("ProfileImg/").child("${System.currentTimeMillis()}.${type}")
         val result = storage.putFile(profileUri).await()
@@ -35,6 +52,22 @@ class UserDao {
                     .document(it).set(user).await()
             }
             result != null
+        }
+        catch(e:Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    suspend fun addFriend(userId: String, userFriend:User):Boolean{
+        return try {
+            var result = db
+                .collection("user")
+                .document(userId)
+                .collection("friends")
+                .add(userFriend)
+                .await()
+            return true
         }
         catch(e:Exception) {
             e.printStackTrace()

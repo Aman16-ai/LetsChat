@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.friendsFragment))
+        appBarConfiguration = AppBarConfiguration(navController.graph)
         toolbar = findViewById(R.id.toolbar)
         toolbar.setupWithNavController(navController,appBarConfiguration)
         setSupportActionBar(toolbar)
