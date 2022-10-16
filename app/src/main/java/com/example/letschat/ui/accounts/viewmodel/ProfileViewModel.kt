@@ -20,6 +20,7 @@ class ProfileViewModel:ViewModel() {
     private val friendRequestRepository = FriendRequestRepository(userDao,friendRequestDao,mAuth)
 
      val allFriendRequests : LiveData<List<FriendRequest>> = friendRequestRepository.allFriendRequest
+    val acceptResponse = friendRequestRepository.friendRequestAcceptedResponse
     init {
         viewModelScope.launch {
             friendRequestRepository.getAllMyFriendRequests()

@@ -15,9 +15,10 @@ import com.example.letschat.data.model.FriendRequest
 import com.example.letschat.data.model.User
 import com.example.letschat.ui.accounts.viewmodel.FriendRequestViewModel
 import com.example.letschat.ui.accounts.viewmodel.ProfileViewModel
+import com.example.letschat.utils.ResponseCallBack
 import com.example.letschat.utils.toast
 
-class FriendRequestAdapter(val context:Context,val profileViewModel: ProfileViewModel):RecyclerView.Adapter<FriendRequestAdapter.FriendRequestAdapter>() {
+class FriendRequestAdapter(val context:Context, val profileViewModel: ProfileViewModel,val responseCallBack: ResponseCallBack):RecyclerView.Adapter<FriendRequestAdapter.FriendRequestAdapter>() {
 
     private val allFriendRequestUser:MutableList<FriendRequest> = ArrayList()
     inner class FriendRequestAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,8 +39,8 @@ class FriendRequestAdapter(val context:Context,val profileViewModel: ProfileView
         holder.userNameTextView.text = "${senderUser?.firstName} ${senderUser?.lastName}"
 
         holder.btn.setOnClickListener {
-            profileViewModel.acceptFriendRequest(allFriendRequestUser[position])
-
+//            profileViewModel.acceptFriendRequest(allFriendRequestUser[position])
+            responseCallBack.callback(holder,allFriendRequestUser[position])
         }
     }
 
@@ -52,3 +53,7 @@ class FriendRequestAdapter(val context:Context,val profileViewModel: ProfileView
         return allFriendRequestUser.size
     }
 }
+
+//interface ResponseCallBack {
+//    fun callback(holder: FriendRequestAdapter.FriendRequestAdapter,friendRequest: FriendRequest)
+//}

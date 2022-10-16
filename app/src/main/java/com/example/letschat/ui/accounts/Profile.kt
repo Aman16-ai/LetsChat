@@ -9,11 +9,13 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.letschat.R
+import com.example.letschat.data.model.FriendRequest
 import com.example.letschat.ui.accounts.adapter.FriendRequestAdapter
 import com.example.letschat.ui.accounts.viewmodel.ProfileViewModel
+import com.example.letschat.utils.ResponseCallBack
 
 
-class Profile : Fragment() {
+class Profile : Fragment(), ResponseCallBack {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var friendRequestAdapter: FriendRequestAdapter
@@ -29,7 +31,7 @@ class Profile : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         recyclerView = view.findViewById(R.id.friend_request_recyclerview)
-        friendRequestAdapter = FriendRequestAdapter(requireContext(),profileViewModel)
+        friendRequestAdapter = FriendRequestAdapter(requireContext(),profileViewModel,this)
 
         profileViewModel.allFriendRequests.observe(viewLifecycleOwner) {
             it?.let {
@@ -43,6 +45,21 @@ class Profile : Fragment() {
             adapter = friendRequestAdapter
         }
         return view
+    }
+
+    override fun callback(
+        holder: FriendRequestAdapter.FriendRequestAdapter,
+        friendRequest: FriendRequest
+    ) {
+        profileViewModel.acceptFriendRequest(friendRequest)
+        profileViewModel.acceptResponse.observe(viewLifecycleOwner) {
+            it?.let {
+                if(it) {
+                    holder.btn.text = "Accepted"
+                    holder.btn.isClickable = false
+                }
+            }
+        }
     }
 
 

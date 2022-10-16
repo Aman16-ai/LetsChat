@@ -22,11 +22,16 @@ class FriendRequestDao {
     }
 
     suspend fun sendFriendRequest(friendRequest: FriendRequest):Boolean {
-        val docRef = db.collection("Friend_Request")
-            .add(friendRequest)
-            .await()
-        docRef.update("id",docRef.id).await()
-        return true
+        return try {
+            val docRef = db.collection("Friend_Request")
+                .add(friendRequest)
+                .await()
+            docRef.update("id",docRef.id).await()
+            true
+        } catch(err:Exception) {
+            err.printStackTrace()
+            false
+        }
     }
 
     suspend fun updateFriendRequestStatus(friendRequest: FriendRequest):Boolean {
