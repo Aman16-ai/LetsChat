@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.letschat.R
 import com.example.letschat.data.model.Message
+import com.example.letschat.helper.getDateTime
 import com.google.firebase.auth.FirebaseAuth
 
 class ChatAdapter(val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -33,10 +34,14 @@ class ChatAdapter(val context: Context): RecyclerView.Adapter<RecyclerView.ViewH
         if(getItemViewType(position) == MessageType.SENDER_MESSAGE) {
             holder as SendMessageViewHolder
             holder.sendTxt.text = messages[position].messagetxt
+            holder.timeTxt.text = messages[position].timestamp?.toDate()?.toString()
+                ?.let { getDateTime(it) }
         }
         else {
             holder as RecieveMessageViewHolder
             holder.recTxt.text = messages[position].messagetxt
+            holder.timeTxt.text = messages[position].timestamp?.toDate()?.toString()
+                ?.let { getDateTime(it) }
         }
     }
 
@@ -55,8 +60,10 @@ class ChatAdapter(val context: Context): RecyclerView.Adapter<RecyclerView.ViewH
     }
     inner class SendMessageViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
         val sendTxt : TextView = itemView.findViewById(R.id.send_message_txt)
+        val timeTxt : TextView = itemView.findViewById(R.id.send_message_timetv)
     }
     inner class RecieveMessageViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
         val recTxt : TextView = itemView.findViewById(R.id.recieve_message_txt)
+        val timeTxt : TextView = itemView.findViewById(R.id.receive_message_timetv)
     }
 }
