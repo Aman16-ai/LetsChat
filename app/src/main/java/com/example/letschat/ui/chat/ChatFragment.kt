@@ -56,6 +56,9 @@ class ChatFragment : Fragment() {
                 }
                 chatAdapter.updateMessages(it.sortedBy { i -> i.timestamp?.seconds })
             }
+//            it?.let {
+//                chatAdapter.updateMessages(it)
+//            }
         }
         btn = view.findViewById(R.id.sendBtn)
         et = view.findViewById(R.id.message_et)

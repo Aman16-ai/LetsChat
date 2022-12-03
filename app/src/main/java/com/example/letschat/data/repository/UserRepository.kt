@@ -23,6 +23,7 @@ class UserRepository {
     private var userAuthState : MutableLiveData<Boolean> = MutableLiveData()
     private var userdoa : UserDao = UserDao()
     private var messageDao : MessageDao = MessageDao()
+    private var friendRequestDao : FriendRequestDao = FriendRequestDao()
 
     private var _allUserProfile : MutableLiveData<List<User>> = MutableLiveData()
     val allUserProfile : LiveData<List<User>>
@@ -96,8 +97,22 @@ class UserRepository {
         }
     }
 
+    private suspend fun checkRequestSent(currentUser:User, user2:User):Boolean {
+        val lst1:List<FriendRequest> = friendRequestDao.getAllSentFriendRequest(currentUser,user2)
+        Log.d("statuscheck", "lst1: ${lst1.toString()}")
+        if (lst1.isNotEmpty()) return true
+        val lst2:List<FriendRequest> = friendRequestDao.getAllSentFriendRequest(user2,currentUser)
+        Log.d("statuscheck", "lst2: ${lst2.toString()}")
+        return lst1.isNotEmpty() || lst2.isNotEmpty()
+    }
     suspend fun getAllUserProfile() {
-        _allUserProfile.postValue(userdoa.getAllUser())
+//        _allUserProfile.postValue(userdoa.getAllUser())
+        var userLst : List<User> = ArrayList()
+        val allUser = userdoa.getAllUser()
+        val currentUser = userdoa.getCurrentUser()
+        userLst = allUser.filter { it.uid != mAuth.uid } as ArrayList<User>
+        userLst = allUser.filter { user -> !checkRequestSent(currentUser!!,user) } as ArrayList<User>
+        _allUserProfile.postValue(userLst)
     }
 
 

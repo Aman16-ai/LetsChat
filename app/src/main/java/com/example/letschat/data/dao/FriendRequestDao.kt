@@ -21,6 +21,16 @@ class FriendRequestDao {
             .toObjects(FriendRequest::class.java)
     }
 
+    suspend fun getAllSentFriendRequest(sender: User, reciever: User): List<FriendRequest> {
+        return db.collection("Friend_Request")
+            .whereGreaterThan("status",FriendRequestStatus.SENT-1)
+            .whereEqualTo("receiverUser", reciever)
+            .whereEqualTo("senderUser", sender)
+            .get()
+            .await()
+            .toObjects(FriendRequest::class.java)
+    }
+
     suspend fun sendFriendRequest(friendRequest: FriendRequest):Boolean {
         return try {
             val docRef = db.collection("Friend_Request")
