@@ -71,6 +71,9 @@ class ChatFragment : Fragment() {
         }
         btn.setOnClickListener {
             chatViewModel.sendMessage(et.text.toString(),friendUserId)
+            et.setText("")
+            et.hint = "Message"
+
         }
         return view
     }

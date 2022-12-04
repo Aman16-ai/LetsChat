@@ -6,5 +6,6 @@ import java.util.*
 data class Message(
     val messagetxt:String? = null,
     val userId:String? = null,
+    val spam:Boolean? = null,
     val timestamp: Timestamp?= Timestamp.now()
 )

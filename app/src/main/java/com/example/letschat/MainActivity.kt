@@ -1,5 +1,6 @@
 package com.example.letschat
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -38,9 +39,11 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener {_,desitnation,_->
             if(desitnation.id == R.id.loginFragment || desitnation.id == R.id.registerUserFragment) {
                 toolbar.visibility = View.GONE
+                window.statusBarColor = Color.parseColor("#3F2B96")
             }
             else {
                 toolbar.visibility = View.VISIBLE
+                window.statusBarColor = Color.parseColor("#588157")
             }
 
         }

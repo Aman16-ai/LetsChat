@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.chat.ChatFragment">
+    tools:context=".ui.chat.ChatFragment"
+    android:padding="5dp"
+    >
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_recyclerview"
         android:layout_width="0dp"
@@ -24,14 +26,20 @@
        app:layout_constraintBottom_toBottomOf="parent"
        app:layout_constraintLeft_toLeftOf="parent"
        android:layout_marginRight="5dp"
+       android:background="@drawable/tvround"
+       android:layout_marginBottom="8dp"
+       android:padding="16dp"
        />
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/sendBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="send"
+        android:backgroundTint="#588157"
+        app:icon="@drawable/ic_baseline_send_24"
+        app:cornerRadius="35dp"
+        android:padding="12dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

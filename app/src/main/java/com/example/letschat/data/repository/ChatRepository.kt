@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.letschat.data.dao.MessageDao
 import com.example.letschat.data.model.Message
+import com.example.letschat.data.model.SpamMessageRequest
+import com.example.letschat.data.model.SpamMessageResponse
+import com.example.letschat.data.service.SpamClassificationService
 import com.example.letschat.utils.Chat
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -48,13 +51,22 @@ class ChatRepository {
 //            _chat.postValue(chatList)
         }
     }
+    private suspend fun classifyMessage(message:String):Boolean? {
+        val spamMessageResponse : SpamMessageResponse? = SpamClassificationService
+            .spamClassificationInstance
+            .predictMessage(SpamMessageRequest(message))
+            .body()
+        return spamMessageResponse?.Spam
 
-    suspend fun sendMessage(message:String,friendUserID: String) {
-        saveMessageToFireBase(message,mAuth.uid + friendUserID)
-        saveMessageToFireBase(message,friendUserID + mAuth.uid)
     }
-    suspend fun saveMessageToFireBase(message:String,roomID:String):Boolean {
-        val message = Message(message,mAuth.uid!!, Timestamp.now())
-        return messageDao.saveMessage(message,roomID)
+    suspend fun sendMessage(message:String,friendUserID: String) {
+        val isSpam = classifyMessage(message)
+        Log.d("spam", "sendMessage: ${isSpam}")
+        saveMessageToFireBase(message,mAuth.uid + friendUserID,isSpam)
+        saveMessageToFireBase(message,friendUserID + mAuth.uid,isSpam)
+    }
+    suspend fun saveMessageToFireBase(message:String,roomID:String,isSpam:Boolean?):Boolean {
+        val messageobj = Message(message,mAuth.uid!!, isSpam,Timestamp.now())
+        return messageDao.saveMessage(messageobj,roomID)
     }
 }

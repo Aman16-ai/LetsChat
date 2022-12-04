@@ -1,6 +1,7 @@
 package com.example.letschat.ui.chat.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.example.letschat.R
 import com.example.letschat.data.model.Message
 import com.example.letschat.helper.getDateTime
 import com.example.letschat.utils.Chat
+import com.example.letschat.utils.makeSpannableString
 import com.google.firebase.auth.FirebaseAuth
 
 class ChatAdapter(val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -45,9 +47,19 @@ class ChatAdapter(val context: Context): RecyclerView.Adapter<RecyclerView.ViewH
 //        }
          if(getItemViewType(position) == MessageType.SENDER_MESSAGE) {
             holder as SendMessageViewHolder
-            holder.sendTxt.text = messages[position].messagetxt
-            holder.timeTxt.text = messages[position].timestamp?.toDate()?.toString()
+            val message = messages[position]
+            holder.sendTxt.text = message.messagetxt
+            holder.timeTxt.text = message.timestamp?.toDate()?.toString()
                 ?.let { getDateTime(it) }
+
+             if (messages[position].spam == true) {
+                 val newmessage = message.messagetxt + "\n(SPAM)"
+                 holder.sendTxt.text =
+                     message.messagetxt?.length?.let {
+                         makeSpannableString(newmessage,
+                             it,newmessage.length)
+                     }
+             }
 
 //            val c : Chat.content = chat[position] as Chat.content
 //            holder.sendTxt.text = c.message?.messagetxt
@@ -55,9 +67,19 @@ class ChatAdapter(val context: Context): RecyclerView.Adapter<RecyclerView.ViewH
         }
         else {
             holder as RecieveMessageViewHolder
-            holder.recTxt.text = messages[position].messagetxt
-            holder.timeTxt.text = messages[position].timestamp?.toDate()?.toString()
+             val message = messages[position]
+            holder.recTxt.text = message.messagetxt
+            holder.timeTxt.text = message.timestamp?.toDate()?.toString()
                 ?.let { getDateTime(it) }
+
+             if (messages[position].spam == true) {
+                 val newmessage = message.messagetxt + "\n(SPAM)"
+                 holder.recTxt.text =
+                     message.messagetxt?.length?.let {
+                         makeSpannableString(newmessage,
+                             it,newmessage.length)
+                     }
+             }
 //            val c : Chat.content = chat[position] as Chat.content
 //            holder.recTxt.text = c.message?.messagetxt
 //            holder.timeTxt.text = getDateTime(c.message?.timestamp?.toDate().toString())
@@ -92,6 +114,10 @@ class ChatAdapter(val context: Context): RecyclerView.Adapter<RecyclerView.ViewH
     inner class SendMessageViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
         val sendTxt : TextView = itemView.findViewById(R.id.send_message_txt)
         val timeTxt : TextView = itemView.findViewById(R.id.send_message_timetv)
+        val spamtv : TextView = itemView.findViewById(R.id.spamtv)
+        init {
+            spamtv.visibility = View.GONE
+        }
     }
     inner class RecieveMessageViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
         val recTxt : TextView = itemView.findViewById(R.id.recieve_message_txt)
